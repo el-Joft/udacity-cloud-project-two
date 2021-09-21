@@ -38,13 +38,13 @@ import { filterImageFromURL, deleteLocalFiles, validURL } from "./util/util";
   });
 
   app.get("/filteredimage", async (req: Request, res: Response) => {
-    const image_url = req.query.image_url;
-    const isValid = validURL(image_url);
+    const image_url: string = req.query.image_url;
+    const isValid: boolean = validURL(image_url);
 
     if (!isValid) {
-      return res.send("Provide a valid image url");
+      return res.status(422).send("Provide a valid image url");
     }
-    const filteredImage = await filterImageFromURL(image_url);
+    const filteredImage: string = await filterImageFromURL(image_url);
 
     res.sendFile(filteredImage);
 
