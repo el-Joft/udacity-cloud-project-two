@@ -9,35 +9,16 @@ import Jimp = require("jimp");
 // RETURNS
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string> {
-  // return new Promise(async resolve => {
-  //   const photo = await Jimp.read(inputURL);
-  //   const outpath =
-  //     "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
-  //   await photo
-  //     .resize(256, 256) // resize
-  //     .quality(60) // set JPEG quality
-  //     .greyscale() // set greyscale
-  //     .write(__dirname + outpath, img => {
-  //       resolve(__dirname + outpath);
-  //     });
-  // });
-
-  return new Promise((resolve, reject) => {
-    Jimp.read(inputURL)
-      .then(photo => {
-        const outpath =
-          "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
-        photo
-          .resize(256, 256) // resize
-          .quality(60) // set JPEG quality
-          .greyscale() // set greyscale
-          .write(__dirname + outpath, img => {
-            resolve(__dirname + outpath);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-        reject("Could not read image.");
+  return new Promise(async resolve => {
+    const photo = await Jimp.read(inputURL);
+    const outpath =
+      "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
+    await photo
+      .resize(256, 256) // resize
+      .quality(60) // set JPEG quality
+      .greyscale() // set greyscale
+      .write(__dirname + outpath, img => {
+        resolve(__dirname + outpath);
       });
   });
 }
@@ -53,15 +34,9 @@ export async function deleteLocalFiles(files: Array<string>) {
   }
 }
 
-export function validURL(str: string) {
-  var pattern = new RegExp(
-    "^(https?:\\/\\/)?" + // protocol
-    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
-    "i"
-  ); // fragment locator
-  return !!pattern.test(str);
+export function validURL(str: string): boolean {
+  const res = str.match(
+    /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  );
+  return res !== null;
 }
