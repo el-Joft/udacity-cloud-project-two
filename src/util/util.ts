@@ -11,9 +11,9 @@ import Jimp = require("jimp");
 export async function filterImageFromURL(inputURL: string): Promise<string> {
   return new Promise(async resolve => {
     const photo = await Jimp.read(inputURL);
-    const outpath =
+    const outpath: string =
       "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
-    await photo
+    photo
       .resize(256, 256) // resize
       .quality(60) // set JPEG quality
       .greyscale() // set greyscale
@@ -35,7 +35,7 @@ export async function deleteLocalFiles(files: Array<string>) {
 }
 
 export function validURL(str: string): boolean {
-  const res = str.match(
+  const res: RegExpMatchArray = str.match(
     /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
   );
   return res !== null;
